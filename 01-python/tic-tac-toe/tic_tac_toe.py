@@ -10,11 +10,11 @@ class TicTacToeGame():
   def __init__(self):
     self.board = [None] * 9
     self.turn = _PLAYER
-    self.is_over = False
+    self.is_game_over = False
     self.winner = None
 
   def is_over(self): # TODO: Finish this function by adding checks for a winning game (rows, columns, diagonals)
-    return self.board.count(None) == 0;
+    return self.board.count(None) == 0
 
   def play(self):
     if self.turn == _PLAYER:
