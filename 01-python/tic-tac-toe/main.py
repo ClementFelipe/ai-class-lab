@@ -7,5 +7,7 @@ def play():
     game.play()
     game.print()
 
+  game.print_result()
+
 if __name__ == "__main__":
   play()

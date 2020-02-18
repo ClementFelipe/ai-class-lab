@@ -11,8 +11,9 @@ class TicTacToeGame():
     self.board = [None] * 9
     self.turn = _PLAYER
     self.is_over = False
+    self.winner = None
 
-  def is_over(self):
+  def is_over(self): # TODO: Finish this function by adding checks for a winning game (rows, columns, diagonals)
     return self.board.count(None) == 0;
 
   def play(self):
@@ -48,7 +49,7 @@ class TicTacToeGame():
 
     self.board[chosen_cell] = _PLAYER_SYMBOL
 
-  def machine_turn(self):
+  def machine_turn(self): # TODO: Finish this function by making the machine choose a random cell (use random module)
     for i, cell in enumerate(self.board):
       if cell is None:
         self.board[i] = _MACHINE_SYMBOL
@@ -61,8 +62,10 @@ class TicTacToeGame():
 
     return "\n".join([row0, row1, row2])
 
-
   def print(self):
     print("Player turn:" if self.turn == _MACHINE else "Machine turn:")
     print(self.format_board())
     print()
+
+  def print_result(self): # TODO: Finish this function in order to print the result based on the *winner*
+    pass
