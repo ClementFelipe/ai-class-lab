@@ -23,7 +23,7 @@ def generate_children(node, chosen_symbol): # TODO: Create a function to generat
 def alternate_symbol(symbol):
     return 'o' if symbol == 'x' else 'x'
 
-def mini_max_ab(node, is_maximizing_player_turn, chosen_symbol): # TODO: Modify this minimax in order to turn it into an alpha-beta pruning version
+def mini_max_ab(node, is_maximizing_player_turn, chosen_symbol): # TODO: Modify this minimax in order to turn it into an alpha-beta pruning version with depth cutting
     game_result = is_game_over(node)
 
     if game_result[0]:
