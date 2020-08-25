@@ -49,23 +49,28 @@ class TicTacToeGame():
 
     self.board[chosen_cell] = _PLAYER_SYMBOL
 
-  def machine_turn(self): # TODO: Finish this function by making the machine choose a random cell (use random module)
+  def machine_turn(self):
+    # TODO: Implement this function to make the machine choose a random cell (use random module)
+    # The result of this function should be that self.board now has one more random cell occupied
+
     for i, cell in enumerate(self.board):
       if cell is None:
         self.board[i] = _MACHINE_SYMBOL
         break
 
   def format_board(self):
-    row0 = "|".join(list(map(lambda c: " " if c is None else c, self.board[0:3])))
-    row1 = "|".join(list(map(lambda c: " " if c is None else c, self.board[3:6])))
-    row2 = "|".join(list(map(lambda c: " " if c is None else c, self.board[6:9])))
-
-    return "\n".join([row0, row1, row2])
+    # TODO: Implement this function, it must be able to print the board in the following format:
+    #  x|o| 
+    #   | | 
+    #   | | 
+    return self.board
 
   def print(self):
     print("Player turn:" if self.turn == _MACHINE else "Machine turn:")
     print(self.format_board())
     print()
 
-  def print_result(self): # TODO: Finish this function in order to print the result based on the *winner*
+  def print_result(self):
+    # TODO: Implement this function in order to print the result based on the self.winner
+
     pass
