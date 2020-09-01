@@ -14,7 +14,55 @@ class TicTacToeGame():
     self.winner = None
 
   def is_over(self): # TODO: Finish this function by adding checks for a winning game (rows, columns, diagonals)
-    return self.board.count(None) == 0
+    isOver = False
+    isOver = self.verifyAdjacents(_PLAYER_SYMBOL)
+
+    if isOver == False:
+      isOver = self.verifyAdjacents(_MACHINE_SYMBOL)
+      
+      #gano la maquina
+      if isOver == True:
+        self.winner = _MACHINE
+    #gano la persona
+    else:
+      self.winner = _PLAYER
+
+    if isOver == False:
+      isOver = True
+      for item in self.board:
+        if item == None:
+          isOver=False
+    
+
+    return isOver
+
+  def verifyAdjacents(self, symbol):
+    threeAd = False
+
+    if self.equalIndexs(0,1,2,symbol):
+      threeAd = True
+    elif self.equalIndexs(3,4,5,symbol):
+      threeAd = True
+    elif self.equalIndexs(6,7,8,symbol):
+      threeAd = True
+    elif self.equalIndexs(0,3,6, symbol):
+      threeAd = True
+    elif self.equalIndexs(1,4,7,symbol):
+      threeAd = True
+    elif self.equalIndexs(2,5,8,symbol):
+      threeAd = True
+    elif self.equalIndexs(0,4,8,symbol):
+      threeAd = True
+    elif self.equalIndexs(2,4,6,symbol):
+      threeAd - True
+
+    return threeAd
+
+  def equalIndexs(self, i, j, k, symbol):
+    if(self.board[i] == symbol and self.board[j] == symbol and self.board[k] == symbol):
+      return True
+    else:
+      return False
 
   def play(self):
     if self.turn == _PLAYER:
