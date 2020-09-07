@@ -1,76 +1,117 @@
-import re
+import sys
+from operator import itemgetter
 
-_PLAYER = "player"
-_MACHINE = "machine"
-
+MAX = 1
+MIN = -1
 _PLAYER_SYMBOL = "x"
 _MACHINE_SYMBOL = "o"
 
-class TicTacToeGame():
-  def __init__(self):
-    self.board = [None] * 9
-    self.turn = _PLAYER
-    self.is_game_over = False
-    self.winner = None
+global jugada_maquina
 
-  def is_over(self): # TODO: Finish this function by adding checks for a winning game (rows, columns, diagonals)
-    return self.board.count(None) == 0
+def minimax(tablero, jugador):
+    global jugada_maquina
+    if game_over(tablero):
+        return [ganador(tablero), 0]
+    
+    movimientos = []
+    for jugada in range(0, len(tablero)):
+        if tablero[jugada] == 0:
+            tableroaux = tablero[:]
+            tableroaux[jugada] = jugador
+            puntuacion = minimax(tableroaux, jugador * (-1))
+            movimientos.append([puntuacion, jugada])
+    
+    if jugador == MAX:
+        movimiento = max(movimientos, key=str)        
+        jugada_maquina = movimiento[1]
+        return movimiento 
+    else:       
+        movimiento = min(movimientos, key=str)        
+        return movimiento[0]
 
-  def play(self):
-    if self.turn == _PLAYER:
-      self.player_turn()
-      self.turn = _MACHINE
+def game_over(tablero):
+    no_tablas = False
+    for i in range(0, len(tablero)):
+        if tablero[i] == 0:
+            no_tablas = True
+            
+    if ganador(tablero) == 0 and no_tablas:
+        return False
     else:
-      self.machine_turn()
-      self.turn = _PLAYER
+        return True
 
-  def player_choose_cell(self):
-    print("Input empty cell bewtween 0 and 8")
+def ganador(tablero):
+    lineas = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5,8], [0, 4, 8], [2, 4, 6]]
+    ganador = 0
+    for linea in lineas:
+        if tablero[linea[0]] == tablero[linea[1]] and tablero[linea[0]] == tablero[linea[2]] and tablero[linea[0]] != 0:
+            ganador = tablero[linea[0]]
+    return ganador
 
-    player_cell = input().strip()
-    match = re.search("\d", player_cell)
+def ver_tablero(tablero):
+    board = list(map(str, tablero))    
+    for i in range(0, len(tablero)):
+        if tablero[i] == MAX:
+            board[i] = _PLAYER_SYMBOL
+        elif tablero[i] == MIN:
+            board[i] = _MACHINE_SYMBOL
+        else:
+            board[i] = ' '
+  
+    print('   |   |')
+    print(' ' + board[0] + ' | ' + board[1] + ' | ' + board[2])
+    print('   |   |')
+    print('-----------')
+    print('   |   |')
+    print(' ' + board[3] + ' | ' + board[4] + ' | ' + board[5])
+    print('   |   |')
+    print('-----------')
+    print('   |   |')
+    print(' ' + board[6] + ' | ' + board[7] + ' | ' + board[8])
+    print('   |   |')    
 
-    if not match:
-      print("Input is not a number, please try again")
+def player_turn(tablero):
+    ok= False
+    while not ok:
+        casilla = input("¿Cual casilla vas a escoger?")
+        if str(casilla) in '0123456789' and len(str(casilla)) == 1 and tablero[int(casilla)-1] == 0:
+            tablero[int(casilla)-1] = MIN
+            ok = True
+        if casilla == "exit":
+            sys.exit(0)
+    return tablero
 
-      return self.player_choose_cell()
+def machine_turn(tablero):
+    global jugada_maquina
+    punt = minimax(tablero[:], MAX)
+    tablero[jugada_maquina] = MAX
+    return tablero
 
-    player_cell = int(player_cell)
-
-    if self.board[player_cell] is not None:
-      print("Cell is already taken, try again")
-
-      return self.player_choose_cell()
-
-    return player_cell
-
-  def player_turn(self):
-    chosen_cell = self.player_choose_cell()
-
-    self.board[chosen_cell] = _PLAYER_SYMBOL
-
-  def machine_turn(self):
-    # TODO: Implement this function to make the machine choose a random cell (use random module)
-    # The result of this function should be that self.board now has one more random cell occupied
-
-    for i, cell in enumerate(self.board):
-      if cell is None:
-        self.board[i] = _MACHINE_SYMBOL
-        break
-
-  def format_board(self):
-    # TODO: Implement this function, it must be able to print the board in the following format:
-    #  x|o| 
-    #   | | 
-    #   | | 
-    return self.board
-
-  def print(self):
-    print("Player turn:" if self.turn == _MACHINE else "Machine turn:")
-    print(self.format_board())
-    print()
-
-  def print_result(self):
-    # TODO: Implement this function in order to print the result based on the self.winner
-
-    pass
+if __name__ == "__main__":
+    print("Ponga el numero de la casilla donde desea iniciar o escriba exit para salir")
+    tablero = [0,0,0,0,0,0,0,0,0]
+    
+    while(True):
+        ver_tablero(tablero)
+        tablero = player_turn(tablero)
+        if game_over(tablero):
+            break
+        
+        tablero = machine_turn(tablero)
+        if game_over(tablero):
+            break
+            
+    ver_tablero(tablero)
+    g = ganador(tablero)
+    if g == 0:
+        gana = "Tablas"
+    elif g == MIN:
+        gana = "Jugador"
+    else:
+        gana = "Ordenador"
+    
+    if gana=="Tablas":
+      print("No hay ganador. El juego quedo en tablas")
+    else:
+      print("Ganador: " + gana)
+      
